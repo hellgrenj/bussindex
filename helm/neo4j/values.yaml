@@ -1,0 +1,4 @@
+{
+  acceptLicenseAgreement: yes,
+  neo4jPassword: mySecretPassword
+}

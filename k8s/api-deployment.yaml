@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bussindexapi
+spec:
+  selector:
+    matchLabels:
+      app: bussindexapi
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: bussindexapi
+    spec:
+      containers:
+      - image: bussindexapi
+        name: bussindexapi
+        ports:
+        - containerPort: 8080
+        resources: {}
+status: {}
