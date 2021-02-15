@@ -28,7 +28,7 @@ func main() {
 	systemRepository := system.NewSystemRepository(driver)
 	systemService := system.NewService(systemRepository, infoLogger)
 	s := rest.NewServer(systemService, infoLogger, errorLogger)
-	fmt.Println("hellu6")
+	fmt.Println("hellu7")
 	s.StartAndListen(8080)
 	// for {
 	// 	time.Sleep(time.Second * 1)
