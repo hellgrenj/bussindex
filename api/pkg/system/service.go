@@ -21,6 +21,6 @@ func NewService(r DBRepository, infoLogger *log.Logger) Service {
 	return &service{r, infoLogger}
 }
 func (s *service) Save(system System) (int64, error) {
-	s.info.Println("SAD PANDA")
+	s.info.Println("SAD PANDA4")
 	return s.r.Save(system)
 }

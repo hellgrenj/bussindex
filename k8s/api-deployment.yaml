@@ -7,8 +7,7 @@ spec:
     matchLabels:
       app: bussindexapi
   replicas: 1
-  strategy:
-    type: Recreate
+  strategy: {}
   template:
     metadata:
       labels:

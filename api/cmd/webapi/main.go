@@ -21,12 +21,17 @@ func main() {
 	infoLogger := log.New(os.Stdout, "INFO: ", 3)
 	errorLogger := log.New(os.Stderr, "ERROR: ", 3)
 	driver, err := db.NewDriver("bolt://bussindexdb-neo4j-community:7687", "neo4j", "mySecretPassword")
+
 	if err != nil {
 		panic(err)
 	}
 	systemRepository := system.NewSystemRepository(driver)
 	systemService := system.NewService(systemRepository, infoLogger)
 	s := rest.NewServer(systemService, infoLogger, errorLogger)
-
+	fmt.Println("hellu6")
 	s.StartAndListen(8080)
+	// for {
+	// 	time.Sleep(time.Second * 1)
+	// 	fmt.Println("hello world9")
+	// }
 }
