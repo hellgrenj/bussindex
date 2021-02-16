@@ -32,7 +32,14 @@ func (s *Server) createSystem(w http.ResponseWriter, r *http.Request) {
 	result := fmt.Sprintf("system created with id %v", id)
 	s.respond(w, &operationResult{Result: result})
 }
-func (s *Server) respond(w http.ResponseWriter, response *operationResult) {
+func (s *Server) getSystems(w http.ResponseWriter, r *http.Request) {
+	allSystems, err := s.systemService.Get()
+	if err != nil {
+		s.handleError(w, err)
+	}
+	s.respond(w, allSystems)
+}
+func (s *Server) respond(w http.ResponseWriter, response interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }

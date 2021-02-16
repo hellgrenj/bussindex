@@ -1,6 +1,11 @@
 package system
 
-import "github.com/neo4j/neo4j-go-driver/v4/neo4j"
+import (
+	"errors"
+	"fmt"
+
+	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
+)
 
 // Repository is responsible for storing and retreiving systems
 type Repository struct {
@@ -12,7 +17,7 @@ func NewSystemRepository(driver *neo4j.Driver) DBRepository {
 	return &Repository{driver: *driver}
 }
 
-// Save a system in neo4j
+// Save a system node in neo4j
 func (r *Repository) Save(system System) (int64, error) {
 	session := r.driver.NewSession(neo4j.SessionConfig{})
 	defer session.Close()
@@ -36,4 +41,40 @@ func (r *Repository) Save(system System) (int64, error) {
 	}
 
 	return persistedSystem.(int64), nil
+}
+
+// Get all the system nodes from neo4j
+func (r *Repository) Get() ([]System, error) {
+	session := r.driver.NewSession(neo4j.SessionConfig{})
+	defer session.Close()
+
+	allSystems, err := session.ReadTransaction(func(transaction neo4j.Transaction) (interface{}, error) {
+		result, err := transaction.Run(`MATCH (s:System) RETURN ID(s) as id, s.description`, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		var systems []System
+		for result.Next() {
+			fmt.Println(result.Record().Get("s.description"))
+			desc, foundDescripton := result.Record().Get("s.description")
+			if !foundDescripton {
+				return nil, errors.New("missing description")
+			}
+			fmt.Println(result.Record().Get("id"))
+			id, foundID := result.Record().Get("id")
+			if !foundID {
+				return nil, errors.New("missing id")
+			}
+			system := &System{ID: id.(int64), Description: desc.(string)}
+			systems = append(systems, *system)
+		}
+
+		return systems, result.Err()
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return allSystems.([]System), nil
 }

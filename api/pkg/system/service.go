@@ -5,11 +5,13 @@ import "log"
 // DBRepository is the interface for the system repository
 type DBRepository interface {
 	Save(System) (int64, error)
+	Get() ([]System, error)
 }
 
 // Service provides system features
 type Service interface {
 	Save(System) (int64, error)
+	Get() ([]System, error)
 }
 type service struct {
 	r    DBRepository
@@ -23,4 +25,7 @@ func NewService(r DBRepository, infoLogger *log.Logger) Service {
 func (s *service) Save(system System) (int64, error) {
 	s.info.Println("SAD PANDA5")
 	return s.r.Save(system)
+}
+func (s *service) Get() ([]System, error) {
+	return s.r.Get()
 }

@@ -30,8 +30,4 @@ func main() {
 	s := rest.NewServer(systemService, infoLogger, errorLogger)
 	fmt.Println("hellu7")
 	s.StartAndListen(8080)
-	// for {
-	// 	time.Sleep(time.Second * 1)
-	// 	fmt.Println("hello world9")
-	// }
 }
