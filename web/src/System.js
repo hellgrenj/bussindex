@@ -18,9 +18,9 @@ function System() {
     console.log(systems[0])
     return systems.map(system =>
       
-      <div key={system.ID} className="systemCards card blue-grey darken-1 row">
-        <h2>{system.Description}</h2>
-      </div>
+      <span key={system.ID} className="systemCards card blue-grey darken-1">
+        {system.Description}
+      </span>
     )
   }
 
@@ -34,7 +34,7 @@ function System() {
   return (
     <>
     <div className="row">
-      <h1>System</h1>
+      <h2>System</h2>
       <div className="col s6"><input placeholder="ange namn och tryck enter" onKeyDown={createSystem}></input></div>
       </div>
       {renderSystems()}

@@ -2,7 +2,7 @@ import React from "react";
 
 function Worker() {
   return (
-   <h1>Worker</h1>
+   <h2>Worker</h2>
   );
 }
 export default Worker;
