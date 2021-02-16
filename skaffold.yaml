@@ -9,6 +9,7 @@ build:
     docker:
       dockerfile: Dockerfile
 deploy:
+  kubeContext: docker-desktop
   kubectl:
     manifests:
     - k8s/*.yaml
