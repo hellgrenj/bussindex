@@ -28,6 +28,5 @@ func main() {
 	systemRepository := system.NewSystemRepository(driver)
 	systemService := system.NewService(systemRepository, infoLogger)
 	s := rest.NewServer(systemService, infoLogger, errorLogger)
-	fmt.Println("hellu7")
 	s.StartAndListen(8080)
 }

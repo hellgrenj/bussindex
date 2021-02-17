@@ -23,9 +23,10 @@ func NewService(r DBRepository, infoLogger *log.Logger) Service {
 	return &service{r, infoLogger}
 }
 func (s *service) Save(system System) (int64, error) {
-	s.info.Println("SAD PANDA5")
+	s.info.Printf("saving a new system with description %s", system.Description)
 	return s.r.Save(system)
 }
 func (s *service) Get() ([]System, error) {
+	s.info.Println("fetching all systems")
 	return s.r.Get()
 }

@@ -3,7 +3,7 @@
 bussindex = swedish for Bus factor  
 *The bus factor is a measurement of the risk resulting from information and capabilities not being shared among team members, derived from the phrase "in case they get hit by a bus."* - Wikipedia
 
-Simple idea with fun and powerful tech. In other words - a Demo. **(work-in-progress)** 
+Simple idea with fun and powerful tech. In other words - a Demo. <span style="color:magenta">**(work-in-progress)** </span>
 
 This demo application includes:  
 
