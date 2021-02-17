@@ -14,10 +14,10 @@ function App() {
 
           <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li>
-              <Link to="/system">System</Link>
+              <Link to="/system">system</Link>
             </li>
             <li>
-              <Link to="/worker">Worker</Link>
+              <Link to="/worker">utvecklare</Link>
             </li>
           </ul>
         </div>
