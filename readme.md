@@ -22,10 +22,9 @@ This demo application includes:
 * Node (for the frontend development)
 
 
-## Init (first time only)
+## Init (one time only)
 1) `` helm repo add equinor-charts https://equinor.github.io/helm-charts/charts/ ``   
 2) `` helm repo update ``  
-3) `` s run --tail `` 
 
 ## Development environment
 start the backend with ``skaffold dev`` (in the root folder)  
