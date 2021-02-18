@@ -62,7 +62,7 @@ function System() {
             onClick={() => setSelectedSystem(null)}
           >close</i>
             <ul className="collection with-header">
-              <li className="collection-header"><h5>Developers working on {selectedSystem}</h5></li>
+              <li className="collection-header"><h5>Utvecklare som arbetar med <b>{selectedSystem}</b></h5></li>
               <li className="collection-item">Johan</li>
               <li className="collection-item active-developer">Fredrik</li>
               <li className="collection-item">Viktor</li>
