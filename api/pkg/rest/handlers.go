@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/hellgrenj/bussindex/pkg/errors"
 	"github.com/hellgrenj/bussindex/pkg/system"
 )
@@ -39,6 +41,18 @@ func (s *Server) getSystems(w http.ResponseWriter, r *http.Request) {
 		s.handleError(w, err)
 	}
 	s.respond(w, &operationResult{Result: allSystems, Success: true})
+}
+func (s *Server) deleteSystemByID(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		s.handleError(w, errors.NewInvalidError("You need to pass in an id", err))
+	}
+	err = s.systemService.Delete(id)
+	if err != nil {
+		s.handleError(w, err)
+	}
+	s.respond(w, &operationResult{Result: "system deleted", Success: true})
 }
 func (s *Server) respond(w http.ResponseWriter, response *operationResult) {
 	w.Header().Set("Content-Type", "application/json")

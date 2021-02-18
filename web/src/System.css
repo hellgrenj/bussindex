@@ -1,9 +1,13 @@
 .systemCards {
     display: inline-block;
     margin-right:10px;
-    padding:5px;
+    padding:20px;
     cursor: pointer;
+    min-width: 200px;
 }
 input {
     color:#fff;
+}
+.systemCards .action {
+    float:right;
 }

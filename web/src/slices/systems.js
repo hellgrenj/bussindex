@@ -39,7 +39,7 @@ export const systemsSelector = (state) => state.systems;
 export default systemsSlice.reducer;
 
 // Asynchronous thunk actions
-export function fetchSystems() {
+export function fetchSystemsThunk() {
   return async (dispatch) => {
     dispatch(getSystems());
 
@@ -53,7 +53,7 @@ export function fetchSystems() {
     }
   };
 }
-export function postSystem(system) {
+export function postSystemThunk(system) {
   return async (dispatch) => {
     try {
       console.log("posting");
@@ -68,7 +68,7 @@ export function postSystem(system) {
       const data = await response.json();
       console.log(data);
       if(data.success) {
-        dispatch(fetchSystems());
+        dispatch(fetchSystemsThunk());
       } else {
         console.log(data.result)
         dispatch(getSystemsFailure(data.result));
@@ -79,3 +79,28 @@ export function postSystem(system) {
     }
   };
 }
+export function deleteSystemThunk(systemId) {
+  return async (dispatch) => {
+    try {
+      console.log("posting");
+      const response = await fetch(`http://localhost:8080/system/${systemId}`, {
+        method: "DELETE",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }
+      });
+      const data = await response.json();
+      console.log(data);
+      if(data.success) {
+        dispatch(fetchSystemsThunk());
+      } else {
+        console.log(data.result)
+        dispatch(getSystemsFailure(data.result));
+      }
+    } catch (error) {
+      dispatch(getSystemsFailure());
+    }
+  };
+}
+

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSystems, postSystem, systemsSelector } from "./slices/systems";
+import { fetchSystemsThunk, postSystemThunk, deleteSystemThunk, systemsSelector } from "./slices/systems";
 import "./System.css";
 function System() {
   const dispatch = useDispatch();
@@ -10,16 +10,31 @@ function System() {
 
   // dispatch our fetchSystems thunk when component first mounts
   useEffect(() => {
-    dispatch(fetchSystems());
+    dispatch(fetchSystemsThunk());
   }, [dispatch]);
 
   const listSystems = () => {
     return systems.map((system) =>
-    <span key={system.ID} className="systemCards card blue-grey darken-1">
-      {system.Description}
-    </span>
-  );
-  }
+      <span
+        key={system.ID}
+        value={system.ID}
+        className="systemCards card blue-grey darken-1"
+      >
+        <h5>{system.Description}</h5>
+        <p>
+          <span
+            className="material-icons action"
+            onClick={() => deleteSystem(system.ID)}
+          >
+            delete
+          </span>
+          <i className="material-icons action" onClick={() => editSystem(system.ID)}>
+            edit
+          </i>
+        </p>
+      </span>
+    );
+  };
   const renderSystems = () => {
     if (loading) return <p>Loading systems...</p>;
     if (hasErrors) {
@@ -31,17 +46,24 @@ function System() {
       );
     }
     if (systems) {
-      return listSystems()
-    
+      return listSystems();
     }
   };
 
   const createSystem = (e) => {
     if (e.key === "Enter") {
       console.log("do validate");
-      dispatch(postSystem({ description: e.target.value }));
+      dispatch(postSystemThunk({ description: e.target.value }));
       e.target.value = "";
     }
+  };
+
+  const deleteSystem = (systemId) => {
+    console.log("delete system", systemId);
+    dispatch(deleteSystemThunk(systemId))
+  };
+  const editSystem = (systemId) => {
+    console.log("edit system", systemId);
   };
 
   return (

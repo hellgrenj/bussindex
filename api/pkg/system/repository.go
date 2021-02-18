@@ -2,7 +2,6 @@ package system
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 )
@@ -43,6 +42,28 @@ func (r *Repository) Save(system System) (int64, error) {
 	return persistedSystem.(int64), nil
 }
 
+// Delete a system node in neo4j
+func (r *Repository) Delete(id int) error {
+
+	session := r.driver.NewSession(neo4j.SessionConfig{})
+	defer session.Close()
+
+	_, err := session.WriteTransaction(func(transaction neo4j.Transaction) (interface{}, error) {
+		_, err := transaction.Run(
+			"MATCH (n) where ID(n)=$id DETACH DELETE n",
+			map[string]interface{}{"id": id})
+		if err != nil {
+			return nil, err
+		}
+		return nil, nil
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Get all the system nodes from neo4j
 func (r *Repository) Get() ([]System, error) {
 	session := r.driver.NewSession(neo4j.SessionConfig{})
@@ -56,12 +77,12 @@ func (r *Repository) Get() ([]System, error) {
 
 		var systems []System
 		for result.Next() {
-			fmt.Println(result.Record().Get("s.description"))
+
 			desc, foundDescripton := result.Record().Get("s.description")
 			if !foundDescripton {
 				return nil, errors.New("missing description")
 			}
-			fmt.Println(result.Record().Get("id"))
+
 			id, foundID := result.Record().Get("id")
 			if !foundID {
 				return nil, errors.New("missing id")
