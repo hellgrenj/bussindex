@@ -1,13 +1,32 @@
 .systemCards {
     display: inline-block;
     margin-right:10px;
-    padding:20px;
-    cursor: pointer;
+    padding:10px;
     min-width: 200px;
+    margin-left:10px;
+    font-size: 1.3em;
 }
 input {
     color:#fff;
 }
 .systemCards .action {
     float:right;
+    margin-right:4px;
+    cursor:pointer;
+}
+.collection, .collection-header, .collection-item{
+    background-color: #282c34!important;
+} 
+.active-developer {
+    background-color:#546e7a !important;
+}
+.collection-item {
+    cursor: pointer;
+}
+.collection-item:hover {
+    background-color:teal!important;
+}
+.developers-section .action {
+    border: #fff thin solid;
+    cursor:pointer;
 }

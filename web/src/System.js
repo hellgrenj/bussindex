@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSystemsThunk, postSystemThunk, deleteSystemThunk, systemsSelector } from "./slices/systems";
 import "./System.css";
@@ -8,6 +8,8 @@ function System() {
     systemsSelector,
   );
 
+  // local state
+  const [selectedSystem, setSelectedSystem] = useState(null);
   // dispatch our fetchSystems thunk when component first mounts
   useEffect(() => {
     dispatch(fetchSystemsThunk());
@@ -20,18 +22,18 @@ function System() {
         value={system.ID}
         className="systemCards card blue-grey darken-1"
       >
-        <h5>{system.Name}</h5>
-        <p>
-          <span
+        {system.Name}
+        
+          <i
             className="material-icons action"
             onClick={() => deleteSystem(system.ID)}
           >
             delete
-          </span>
-          <i className="material-icons action" onClick={() => editSystem(system.ID)}>
+          </i>
+          <i className="material-icons action" onClick={() => editSystem(system.Name)}>
             edit
           </i>
-        </p>
+        
       </span>
     );
   };
@@ -49,7 +51,32 @@ function System() {
       return listSystems();
     }
   };
-
+  const renderDevelopersWorkinOnSystem = () => {
+    if(selectedSystem) {
+      return (
+        <>
+        <div className="row">
+          <div className="col s6 developers-section">
+          <i
+            className="material-icons action"
+            onClick={() => setSelectedSystem(null)}
+          >close</i>
+            <ul className="collection with-header">
+              <li className="collection-header"><h5>Developers working on {selectedSystem}</h5></li>
+              <li className="collection-item">Johan</li>
+              <li className="collection-item active-developer">Fredrik</li>
+              <li className="collection-item">Viktor</li>
+              <li className="collection-item active-developer">Sofia</li>
+            </ul>
+          </div>
+        </div>
+        </>
+      );
+    } else {
+      return null
+    }
+   
+  }
   const createSystem = (e) => {
     if (e.key === "Enter") {
       console.log("do validate");
@@ -59,11 +86,13 @@ function System() {
   };
 
   const deleteSystem = (systemId) => {
+    setSelectedSystem(null)
     console.log("delete system", systemId);
     dispatch(deleteSystemThunk(systemId))
   };
-  const editSystem = (systemId) => {
-    console.log("edit system", systemId);
+  const editSystem = (systemName) => {
+    console.log("edit system", systemName);
+    setSelectedSystem(systemName)
   };
 
   return (
@@ -78,7 +107,10 @@ function System() {
           </input>
         </div>
       </div>
-      {renderSystems()}
+      <div className="row">
+        {renderSystems()}
+      </div>
+      {renderDevelopersWorkinOnSystem()}
     </>
   );
 }
