@@ -25,7 +25,7 @@ func NewService(r DBRepository, infoLogger *log.Logger) Service {
 	return &service{r, infoLogger}
 }
 func (s *service) Save(system System) (int64, error) {
-	s.info.Printf("saving a new system with description %s", system.Description)
+	s.info.Printf("saving a new system with name %s", system.Name)
 	return s.r.Save(system)
 }
 func (s *service) Get() ([]System, error) {

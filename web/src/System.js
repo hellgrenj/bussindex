@@ -20,7 +20,7 @@ function System() {
         value={system.ID}
         className="systemCards card blue-grey darken-1"
       >
-        <h5>{system.Description}</h5>
+        <h5>{system.Name}</h5>
         <p>
           <span
             className="material-icons action"
@@ -53,7 +53,7 @@ function System() {
   const createSystem = (e) => {
     if (e.key === "Enter") {
       console.log("do validate");
-      dispatch(postSystemThunk({ description: e.target.value }));
+      dispatch(postSystemThunk({ name: e.target.value }));
       e.target.value = "";
     }
   };

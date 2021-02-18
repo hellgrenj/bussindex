@@ -23,8 +23,8 @@ func (r *Repository) Save(system System) (int64, error) {
 
 	persistedSystem, err := session.WriteTransaction(func(transaction neo4j.Transaction) (interface{}, error) {
 		result, err := transaction.Run(
-			"CREATE (a:System) SET a.description = $description RETURN id(a)",
-			map[string]interface{}{"description": system.Description})
+			"CREATE (a:System) SET a.name = $name RETURN id(a)",
+			map[string]interface{}{"name": system.Name})
 		if err != nil {
 			return nil, err
 		}
@@ -70,7 +70,7 @@ func (r *Repository) Get() ([]System, error) {
 	defer session.Close()
 
 	allSystems, err := session.ReadTransaction(func(transaction neo4j.Transaction) (interface{}, error) {
-		result, err := transaction.Run(`MATCH (s:System) RETURN ID(s) as id, s.description`, nil)
+		result, err := transaction.Run(`MATCH (s:System) RETURN ID(s) as id, s.name`, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -78,16 +78,16 @@ func (r *Repository) Get() ([]System, error) {
 		var systems []System
 		for result.Next() {
 
-			desc, foundDescripton := result.Record().Get("s.description")
-			if !foundDescripton {
-				return nil, errors.New("missing description")
+			name, foundName := result.Record().Get("s.name")
+			if !foundName {
+				return nil, errors.New("missing name")
 			}
 
 			id, foundID := result.Record().Get("id")
 			if !foundID {
 				return nil, errors.New("missing id")
 			}
-			system := &System{ID: id.(int64), Description: desc.(string)}
+			system := &System{ID: id.(int64), Name: name.(string)}
 			systems = append(systems, *system)
 		}
 
