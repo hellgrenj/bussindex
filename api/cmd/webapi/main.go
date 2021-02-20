@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/hellgrenj/bussindex/pkg/db"
+	"github.com/hellgrenj/bussindex/pkg/developer"
 	"github.com/hellgrenj/bussindex/pkg/rest"
 	"github.com/hellgrenj/bussindex/pkg/system"
 )
@@ -27,6 +28,9 @@ func main() {
 	}
 	systemRepository := system.NewSystemRepository(driver)
 	systemService := system.NewService(systemRepository, infoLogger)
-	s := rest.NewServer(systemService, infoLogger, errorLogger)
+
+	developerRepository := developer.NewDeveloperRepository(driver)
+	developerService := developer.NewService(developerRepository, infoLogger)
+	s := rest.NewServer(systemService, developerService, infoLogger, errorLogger)
 	s.StartAndListen(8080)
 }

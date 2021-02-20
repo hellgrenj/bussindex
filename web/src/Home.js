@@ -3,7 +3,7 @@ import React from "react";
 function Home() {
   return (
     <>
-      <h2>bussindex</h2>
+      <h2>Bussindex</h2>
       <div>
         Registrera medarbetare, system medarbetare jobbar med, tekniker som
         system är byggda i osv... Fyll även i när medarbetaren började hos er..

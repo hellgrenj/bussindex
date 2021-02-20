@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/hellgrenj/bussindex/pkg/developer"
 	"github.com/hellgrenj/bussindex/pkg/errors"
 	"github.com/hellgrenj/bussindex/pkg/system"
 )
@@ -33,6 +34,21 @@ func (s *Server) createSystem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	result := fmt.Sprintf("system created with id %v", id)
+	s.respond(w, &operationResult{Result: result, Success: true})
+}
+func (s *Server) createDeveloper(w http.ResponseWriter, r *http.Request) {
+
+	var developer developer.Developer
+	if err := s.decode(w, r, &developer); err != nil {
+		s.handleError(w, errors.NewInvalidError(err.Error(), err))
+		return
+	}
+	id, err := s.developerService.Save(developer)
+	if err != nil {
+		s.handleError(w, err)
+		return
+	}
+	result := fmt.Sprintf("developer created with id %v", id)
 	s.respond(w, &operationResult{Result: result, Success: true})
 }
 func (s *Server) getSystems(w http.ResponseWriter, r *http.Request) {

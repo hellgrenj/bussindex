@@ -9,16 +9,18 @@ import (
 
 	"github.com/golang/gddo/httputil/header"
 	"github.com/gorilla/mux"
+	"github.com/hellgrenj/bussindex/pkg/developer"
 	"github.com/hellgrenj/bussindex/pkg/system"
 	"github.com/hellgrenj/bussindex/pkg/validation"
 )
 
 // Server is the http server struct
 type Server struct {
-	router        *mux.Router
-	systemService system.Service
-	info          *log.Logger
-	error         *log.Logger
+	router           *mux.Router
+	systemService    system.Service
+	developerService developer.Service
+	info             *log.Logger
+	error            *log.Logger
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -56,8 +58,8 @@ func (s *Server) decode(w http.ResponseWriter, r *http.Request, v validation.Ok)
 }
 
 // NewServer returns a new http server
-func NewServer(systemService system.Service, infoLogger *log.Logger, errorLogger *log.Logger) *Server {
-	s := &Server{router: mux.NewRouter(), systemService: systemService, info: infoLogger, error: errorLogger}
+func NewServer(systemService system.Service, developerService developer.Service, infoLogger *log.Logger, errorLogger *log.Logger) *Server {
+	s := &Server{router: mux.NewRouter(), systemService: systemService, developerService: developerService, info: infoLogger, error: errorLogger}
 	s.routes()
 	return s
 }
