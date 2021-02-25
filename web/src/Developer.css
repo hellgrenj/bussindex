@@ -1,0 +1,19 @@
+.datepicker-calendar-container{
+    background-color: #282c34;
+}
+
+
+.developerCards {
+    display: inline-block;
+    margin-right:10px!important;
+    padding:10px;
+    min-width: 200px;
+    margin-left:10px;
+    font-size: 1.3em;
+}
+
+.developerCards .action {
+    float:right;
+    margin-right:4px;
+    cursor:pointer;
+}

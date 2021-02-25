@@ -18,5 +18,8 @@ func (d *Developer) OK() error {
 	if len(d.Name) == 0 {
 		return validation.ErrMissingField("Name")
 	}
+	if d.DateOfEmployment.IsZero() {
+		return validation.ErrMissingField("DateOfEmployment")
+	}
 	return nil
 }

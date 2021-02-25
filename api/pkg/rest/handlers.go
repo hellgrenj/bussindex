@@ -37,7 +37,7 @@ func (s *Server) createSystem(w http.ResponseWriter, r *http.Request) {
 	s.respond(w, &operationResult{Result: result, Success: true})
 }
 func (s *Server) createDeveloper(w http.ResponseWriter, r *http.Request) {
-
+	// TODO parse date correct.. ISO to RFC 3339..
 	var developer developer.Developer
 	if err := s.decode(w, r, &developer); err != nil {
 		s.handleError(w, errors.NewInvalidError(err.Error(), err))
@@ -55,8 +55,17 @@ func (s *Server) getSystems(w http.ResponseWriter, r *http.Request) {
 	allSystems, err := s.systemService.Get()
 	if err != nil {
 		s.handleError(w, err)
+		return
 	}
 	s.respond(w, &operationResult{Result: allSystems, Success: true})
+}
+func (s *Server) getDevelopers(w http.ResponseWriter, r *http.Request) {
+	allDevelopers, err := s.developerService.Get()
+	if err != nil {
+		s.handleError(w, err)
+		return
+	}
+	s.respond(w, &operationResult{Result: allDevelopers, Success: true})
 }
 func (s *Server) deleteSystemByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

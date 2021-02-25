@@ -1,9 +1,13 @@
 import React from "react";
 import System from "./System";
-import Worker from "./Worker";
+import Developer from "./Developer";
 import Home from "./Home";
+
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import "materialize-css/dist/css/materialize.min.css";
+import "materialize-css/dist/js/materialize.min.js";
 import "./App.css";
+
 function App() {
   
   return (
@@ -17,7 +21,7 @@ function App() {
               <Link to="/system">system</Link>
             </li>
             <li>
-              <Link to="/worker">utvecklare</Link>
+              <Link to="/developer">utvecklare</Link>
             </li>
           </ul>
         </div>
@@ -29,8 +33,8 @@ function App() {
               <Route path="/system">
                 <System />
               </Route>
-              <Route path="/worker">
-                <Worker />
+              <Route path="/developer">
+                <Developer />
               </Route>
               <Route path="/">
                 <Home />

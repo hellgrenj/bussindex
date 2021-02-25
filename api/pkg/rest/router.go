@@ -15,6 +15,7 @@ func (s *Server) routes() {
 	s.router.HandleFunc("/system", s.getSystems).Methods("GET")
 
 	s.router.HandleFunc("/developer", s.createDeveloper).Methods("POST")
+	s.router.HandleFunc("/developer", s.getDevelopers).Methods("GET")
 
 }
 func loggingMiddleware(next http.Handler) http.Handler {

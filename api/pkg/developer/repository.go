@@ -71,7 +71,7 @@ func (r *Repository) Get() ([]Developer, error) {
 	defer session.Close()
 
 	allDevelopers, err := session.ReadTransaction(func(transaction neo4j.Transaction) (interface{}, error) {
-		result, err := transaction.Run(`MATCH (d:Developer) RETURN ID(d) as id, d.Name, d.DateOfEmployment`, nil)
+		result, err := transaction.Run(`MATCH (d:Developer) RETURN ID(d) as id, d.name, d.dateOfEmployment`, nil)
 		if err != nil {
 			return nil, err
 		}

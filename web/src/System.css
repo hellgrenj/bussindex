@@ -1,6 +1,6 @@
 .systemCards {
     display: inline-block;
-    margin-right:10px;
+    margin-right:10px!important;
     padding:10px;
     min-width: 200px;
     margin-left:10px;
