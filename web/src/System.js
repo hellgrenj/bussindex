@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { developersSelector } from "./slices/developers";
 import { fetchSystemsThunk, postSystemThunk, deleteSystemThunk, systemsSelector } from "./slices/systems";
+import { fetchDevelopersThunk} from "./slices/developers";
 import "./System.css";
 function System() {
   const dispatch = useDispatch();
   const { systems, loading, hasErrors, errorMessage } = useSelector(
     systemsSelector,
   );
+  const { developers } = useSelector(developersSelector);
 
   // local state
   const [selectedSystem, setSelectedSystem] = useState(null);
   // dispatch our fetchSystems thunk when component first mounts
   useEffect(() => {
     dispatch(fetchSystemsThunk());
+    dispatch(fetchDevelopersThunk());
   }, [dispatch]);
 
   const listSystems = () => {
@@ -51,6 +55,16 @@ function System() {
       return listSystems();
     }
   };
+  const listDevelopers = () => {
+    if(developers) {
+      return developers.map((dev) =>
+      <li key={dev.ID} className="collection-item">{dev.Name}</li>
+      );
+    } else {
+      return "Inga utvecklare är inlagda i systemet"
+    }
+   
+  };
   const renderDevelopersWorkinOnSystem = () => {
     if(selectedSystem) {
       return (
@@ -62,11 +76,8 @@ function System() {
             onClick={() => setSelectedSystem(null)}
           >close</i>
             <ul className="collection with-header">
-              <li className="collection-header"><h5>Utvecklare som arbetar med <b>{selectedSystem}</b></h5></li>
-              <li className="collection-item">Johan</li>
-              <li className="collection-item active-developer">Fredrik</li>
-              <li className="collection-item">Viktor</li>
-              <li className="collection-item active-developer">Sofia</li>
+              <li className="collection-header"><h5>Markerade utvecklare som arbetar med <b>{selectedSystem}</b></h5></li>
+             {listDevelopers()}
             </ul>
           </div>
         </div>

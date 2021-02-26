@@ -42,6 +42,30 @@ func (r *Repository) Save(system System) (int64, error) {
 	return persistedSystemID.(int64), nil
 }
 
+// AddDeveloper adds a relationship to a developer node (Dev working with system)
+func (r *Repository) AddDeveloper(systemID int, developerID int) error {
+	session := r.driver.NewSession(neo4j.SessionConfig{})
+	defer session.Close()
+
+	_, err := session.WriteTransaction(func(transaction neo4j.Transaction) (interface{}, error) {
+		result, err := transaction.Run(
+			"MATCH (a:System), (b:Developer) WHERE ID(a) = $systemId AND ID(b) = $developerId CREATE (b)-[r:WORKING_ON]->(a)",
+			map[string]interface{}{"systemId": systemID, "developerId": developerID})
+		if err != nil {
+			return nil, err
+		}
+		if result.Next() {
+			return result.Record().Values[0], nil
+		}
+		return nil, result.Err()
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Delete a system node in neo4j
 func (r *Repository) Delete(id int) error {
 

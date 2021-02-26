@@ -79,3 +79,26 @@ export function postDeveloperThunk(developer) {
     }
   };
 }
+export function deleteDeveloperThunk(developerId) {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(`http://localhost:8080/developer/${developerId}`, {
+        method: "DELETE",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }
+      });
+      const data = await response.json();
+      console.log(data);
+      if(data.success) {
+        dispatch(fetchDevelopersThunk());
+      } else {
+        console.log(data.result)
+        dispatch(getDevelopersFailure(data.result));
+      }
+    } catch (error) {
+      dispatch(getDevelopersFailure());
+    }
+  };
+}

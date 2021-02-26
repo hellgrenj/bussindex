@@ -37,7 +37,6 @@ func (s *Server) createSystem(w http.ResponseWriter, r *http.Request) {
 	s.respond(w, &operationResult{Result: result, Success: true})
 }
 func (s *Server) createDeveloper(w http.ResponseWriter, r *http.Request) {
-	// TODO parse date correct.. ISO to RFC 3339..
 	var developer developer.Developer
 	if err := s.decode(w, r, &developer); err != nil {
 		s.handleError(w, errors.NewInvalidError(err.Error(), err))
@@ -72,12 +71,45 @@ func (s *Server) deleteSystemByID(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		s.handleError(w, errors.NewInvalidError("You need to pass in an id", err))
+		return
 	}
 	err = s.systemService.Delete(id)
 	if err != nil {
 		s.handleError(w, err)
+		return
 	}
 	s.respond(w, &operationResult{Result: "system deleted", Success: true})
+}
+func (s *Server) addDeveloperToSystem(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	systemID, err := strconv.Atoi(vars["systemID"])
+	if err != nil {
+		s.handleError(w, errors.NewInvalidError("You need to pass in an systemID", err))
+		return
+	}
+	developerID, err := strconv.Atoi(vars["developerID"])
+	if err != nil {
+		s.handleError(w, errors.NewInvalidError("You need to pass in an developerID", err))
+		return
+	}
+	err = s.systemService.AddDeveloper(systemID, developerID)
+	if err != nil {
+		s.handleError(w, err)
+		return
+	}
+	s.respond(w, &operationResult{Result: "developer added to system", Success: true})
+}
+func (s *Server) deleteDeveloperByID(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		s.handleError(w, errors.NewInvalidError("You need to pass in an id", err))
+	}
+	err = s.developerService.Delete(id)
+	if err != nil {
+		s.handleError(w, err)
+	}
+	s.respond(w, &operationResult{Result: "developer deleted", Success: true})
 }
 func (s *Server) respond(w http.ResponseWriter, response *operationResult) {
 	w.Header().Set("Content-Type", "application/json")

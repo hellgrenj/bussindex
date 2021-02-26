@@ -13,9 +13,11 @@ func (s *Server) routes() {
 	s.router.HandleFunc("/system", s.createSystem).Methods("POST")
 	s.router.HandleFunc("/system/{id}", s.deleteSystemByID).Methods("DELETE")
 	s.router.HandleFunc("/system", s.getSystems).Methods("GET")
+	s.router.HandleFunc("/system/{systemID}/adddev/{developerID}", s.addDeveloperToSystem).Methods("PUT")
 
 	s.router.HandleFunc("/developer", s.createDeveloper).Methods("POST")
 	s.router.HandleFunc("/developer", s.getDevelopers).Methods("GET")
+	s.router.HandleFunc("/developer/{id}", s.deleteDeveloperByID).Methods("DELETE")
 
 }
 func loggingMiddleware(next http.Handler) http.Handler {

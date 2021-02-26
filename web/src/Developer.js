@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {useEffect, useState, useRef} from "react";
-import { developersSelector, fetchDevelopersThunk, postDeveloperThunk} from "./slices/developers";
+import { deleteDeveloperThunk, developersSelector, fetchDevelopersThunk, postDeveloperThunk} from "./slices/developers";
 import "materialize-css/dist/css/materialize.min.css";
 import "materialize-css/dist/js/materialize.min.js";
 import "./Developer.css";
@@ -33,6 +33,9 @@ function Developer() {
     nameEl.current.value = '';
     doeEl.current.value = '';
   }
+  const deleteDeveloper = (developerId) => {
+    dispatch(deleteDeveloperThunk(developerId))
+  };
   const listDevelopers = () => {
     return developers.map((dev) =>
       <span
@@ -43,7 +46,7 @@ function Developer() {
         {dev.Name} <br/>
         {new Date(dev.DateOfEmployment).toISOString().split('T')[0]}
         <i
-            className="material-icons action"
+            className="material-icons action" onClick={() => deleteDeveloper(dev.ID)}
           >
             delete
           </i>

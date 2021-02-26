@@ -10,6 +10,7 @@ type IRepository interface {
 	Save(System) (int64, error)
 	Get() ([]System, error)
 	Delete(id int) error
+	AddDeveloper(systemID int, developerID int) error
 }
 
 // Service provides system features
@@ -17,6 +18,7 @@ type Service interface {
 	Save(System) (int64, error)
 	Get() ([]System, error)
 	Delete(id int) error
+	AddDeveloper(systemID int, developerID int) error
 }
 type service struct {
 	r    IRepository
@@ -45,4 +47,10 @@ func (s *service) Get() ([]System, error) {
 func (s *service) Delete(id int) error {
 	s.info.Printf("deleting system with id %d", id)
 	return s.r.Delete(id)
+}
+
+// later create an AddOrRemove with the same signature? and then if exist we remove it and if it doesn't we add it?
+func (s *service) AddDeveloper(systemID int, developerID int) error {
+	s.info.Printf("adding developer with id %d to system with id %d", developerID, systemID)
+	return s.r.AddDeveloper(systemID, developerID)
 }
