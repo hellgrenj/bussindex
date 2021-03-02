@@ -2,6 +2,7 @@ package system
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 )
@@ -66,6 +67,32 @@ func (r *Repository) AddDeveloper(systemID int, developerID int) error {
 	return nil
 }
 
+//
+// RemoveDeveloper removes a relationship with a developer node
+func (r *Repository) RemoveDeveloper(systemID int, developerID int) error {
+	session := r.driver.NewSession(neo4j.SessionConfig{})
+	defer session.Close()
+
+	_, err := session.WriteTransaction(func(transaction neo4j.Transaction) (interface{}, error) {
+		result, err := transaction.Run(
+
+			"MATCH (s:System)<-[r:WORKING_ON]-(developer) WHERE ID(s) = $systemId AND ID(developer) = $developerId  Delete r",
+			map[string]interface{}{"systemId": systemID, "developerId": developerID})
+		if err != nil {
+			return nil, err
+		}
+		if result.Next() {
+			return result.Record().Values[0], nil
+		}
+		return nil, result.Err()
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Delete a system node in neo4j
 func (r *Repository) Delete(id int) error {
 
@@ -86,6 +113,39 @@ func (r *Repository) Delete(id int) error {
 	}
 
 	return nil
+}
+
+// GetDevIdsWorkingOnSystem takes a system id and returns a list of developer ids working on the system
+func (r *Repository) GetDevIdsWorkingOnSystem(systemID int) ([]int64, error) {
+	session := r.driver.NewSession(neo4j.SessionConfig{})
+	defer session.Close()
+
+	devIds, err := session.ReadTransaction(func(transaction neo4j.Transaction) (interface{}, error) {
+		result, err := transaction.Run(
+			"MATCH (s:System)<-[:WORKING_ON]-(developer) WHERE ID(s) = $systemId RETURN ID(developer) as id",
+			map[string]interface{}{"systemId": systemID})
+		if err != nil {
+			return nil, err
+		}
+
+		var devIds []int64
+		for result.Next() {
+			fmt.Println(result.Record())
+			id, foundID := result.Record().Get("id")
+			if !foundID {
+				return nil, errors.New("missing id")
+			}
+
+			devIds = append(devIds, id.(int64))
+		}
+
+		return devIds, result.Err()
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return devIds.([]int64), nil
 }
 
 // Get all the system nodes from neo4j

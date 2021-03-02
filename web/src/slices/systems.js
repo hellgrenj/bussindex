@@ -4,7 +4,7 @@ export const initialState = {
   loading: false,
   hasErrors: false,
   errorMessage: null,
-  systems: [],
+  systems: []
 };
 
 // A slice for systems with our 3 reducers
@@ -24,7 +24,7 @@ const systemsSlice = createSlice({
       state.loading = false;
       state.hasErrors = true;
       state.errorMessage = payload;
-    },
+    }
   },
 });
 
@@ -85,6 +85,54 @@ export function deleteSystemThunk(systemId) {
       console.log("posting");
       const response = await fetch(`http://localhost:8080/system/${systemId}`, {
         method: "DELETE",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }
+      });
+      const data = await response.json();
+      console.log(data);
+      if(data.success) {
+        dispatch(fetchSystemsThunk());
+      } else {
+        console.log(data.result)
+        dispatch(getSystemsFailure(data.result));
+      }
+    } catch (error) {
+      dispatch(getSystemsFailure());
+    }
+  };
+}
+export function addDevToSystemThunk(systemId, devId) {
+  return async (dispatch) => {
+    try {
+      console.log("posting");
+      const response = await fetch(`http://localhost:8080/system/${systemId}/adddev/${devId}`, {
+        method: "PUT",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }
+      });
+      const data = await response.json();
+      console.log(data);
+      if(data.success) {
+        dispatch(fetchSystemsThunk());
+      } else {
+        console.log(data.result)
+        dispatch(getSystemsFailure(data.result));
+      }
+    } catch (error) {
+      dispatch(getSystemsFailure());
+    }
+  };
+}
+export function removeDevFromSystemThunk(systemId, devId) {
+  return async (dispatch) => {
+    try {
+      console.log("posting");
+      const response = await fetch(`http://localhost:8080/system/${systemId}/removedev/${devId}`, {
+        method: "PUT",
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",

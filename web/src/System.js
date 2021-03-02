@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { developersSelector } from "./slices/developers";
-import { fetchSystemsThunk, postSystemThunk, deleteSystemThunk, systemsSelector } from "./slices/systems";
+import { fetchSystemsThunk, addDevToSystemThunk, removeDevFromSystemThunk, postSystemThunk, deleteSystemThunk, systemsSelector } from "./slices/systems";
 import { fetchDevelopersThunk} from "./slices/developers";
 import "./System.css";
 function System() {
@@ -13,11 +13,18 @@ function System() {
 
   // local state
   const [selectedSystem, setSelectedSystem] = useState(null);
+
   // dispatch our fetchSystems thunk when component first mounts
   useEffect(() => {
     dispatch(fetchSystemsThunk());
     dispatch(fetchDevelopersThunk());
   }, [dispatch]);
+
+  useEffect(() => {
+    if(selectedSystem) { 
+      setSelectedSystem(systems.filter(s => s.ID == selectedSystem.ID)[0])
+    }
+  }, [systems])
 
   const listSystems = () => {
     return systems.map((system) =>
@@ -34,7 +41,7 @@ function System() {
           >
             delete
           </i>
-          <i className="material-icons action" onClick={() => editSystem(system.Name)}>
+          <i className="material-icons action" onClick={() => editSystem(system)}>
             edit
           </i>
         
@@ -56,10 +63,15 @@ function System() {
     }
   };
   const listDevelopers = () => {
-    if(developers) {
-      return developers.map((dev) =>
-      <li key={dev.ID} className="collection-item">{dev.Name}</li>
-      );
+    if(developers) {  
+      return developers.map((dev) => {
+      if(selectedSystem.DevIds && selectedSystem.DevIds.includes(dev.ID)) {
+        return <li key={dev.ID} className="collection-item active-developer" value={dev.ID} onClick={removeDevFromSystem}>{dev.Name}</li> 
+      } else {
+       return <li key={dev.ID} className="collection-item" value={dev.ID} onClick={addDevToSystem}>{dev.Name}</li>
+      }
+      
+    });
     } else {
       return "Inga utvecklare är inlagda i systemet"
     }
@@ -76,7 +88,7 @@ function System() {
             onClick={() => setSelectedSystem(null)}
           >close</i>
             <ul className="collection with-header">
-              <li className="collection-header"><h5>Markerade utvecklare som arbetar med <b>{selectedSystem}</b></h5></li>
+              <li className="collection-header"><h5>Markerade utvecklare arbetar med <b>{selectedSystem.Name}</b></h5></li>
              {listDevelopers()}
             </ul>
           </div>
@@ -95,15 +107,22 @@ function System() {
       e.target.value = "";
     }
   };
-
+  const addDevToSystem = (e) => {
+    const devId = e.target.value;
+    dispatch(addDevToSystemThunk(selectedSystem.ID, devId))
+  }
+  const removeDevFromSystem = (e) => {
+    const devId = e.target.value;
+    dispatch(removeDevFromSystemThunk(selectedSystem.ID, devId))
+  }
   const deleteSystem = (systemId) => {
     setSelectedSystem(null)
     console.log("delete system", systemId);
     dispatch(deleteSystemThunk(systemId))
   };
-  const editSystem = (systemName) => {
-    console.log("edit system", systemName);
-    setSelectedSystem(systemName)
+  const editSystem = (system) => {
+    console.log("edit system", system.Name);
+    setSelectedSystem(system)
   };
 
   return (
