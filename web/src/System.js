@@ -49,7 +49,6 @@ function System() {
     );
   };
   const renderSystems = () => {
-    if (loading) return <p>Loading systems...</p>;
     if (hasErrors) {
       return (
         <>

@@ -54,7 +54,6 @@ function Developer() {
     );
   };
   const renderDevelopers = () => {
-    if (loading) return <p>Loading developers...</p>;
     if (hasErrors) {
       return (
         <>
@@ -85,7 +84,7 @@ function Developer() {
    <div className="row">
    <h2>Utvecklare</h2>
         <div className="col s6">
-          <input ref={nameEl} placeholder="ange namn och tryck enter" onChange={nameChangeHandler}></input>
+          <input ref={nameEl} placeholder="Namn" onChange={nameChangeHandler}></input>
           <input ref={doeEl} type="text" placeholder="Anställningsdatum" className="datepicker"></input>
           <button className="btn-large" onClick={createDeveloper}>Skapa utvecklare</button>
         </div>
